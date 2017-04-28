@@ -1,3 +1,11 @@
+package com.assistantsys.main;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.swing.JFrame;
 
 import com.iflytek.cloud.speech.RecognizerListener;
@@ -11,9 +19,26 @@ public class MainSys {
 
 	public static final String appid = "58fe1a81";
 
-	public static void main(String[] args) {
-		initIFly();
-		initParam();
+	public static void main(String[] args) throws AWTException {
+		final Robot robot = new Robot();
+		robot.keyPress(KeyEvent.VK_A);
+		// initIFly();
+		// initParam();
+		// final JFrame mJFrame = new JFrame();
+		// mJFrame.setUndecorated(true);
+		// mJFrame.setSize(400, 300);
+		// mJFrame.sAetLocationRelativeTo(null);
+		// mJFrame.setVisible(true);
+		//
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+//				mJFrame.setVisible(false);
+				robot.keyPress(KeyEvent.VK_A);
+			}
+		}, 2000);
 	}
 
 	private static void initIFly() {

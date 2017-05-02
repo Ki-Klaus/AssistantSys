@@ -3,11 +3,14 @@ package com.assistantsys.main;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
+import com.assistantsys.model.IFlyJsonModel;
+import com.assistantsys.model.Ws;
 import com.google.gson.Gson;
 import com.iflytek.cloud.speech.RecognizerListener;
 import com.iflytek.cloud.speech.RecognizerResult;
@@ -20,11 +23,17 @@ public class MainSys {
 
 	private Gson gson = new Gson();
 	public static final String appid = "appid=58fe1a81";
+	private IFlyJsonModel mIFlyJsonModel;
+	private RobotUtil mRobotUtil;
+	private StringBuffer mStringBuffer = new StringBuffer();
+
+	public MainSys() {
+		SpeechUtility.createUtility(appid);
+		initParam();
+	}
 
 	public static void main(String[] args) throws AWTException {
 		final Robot robot = new Robot();
-		SpeechUtility.createUtility(appid);
-
 		// final JFrame mJFrame = new JFrame();
 		// mJFrame.setUndecorated(true);
 		// mJFrame.setSize(400, 300);
@@ -32,13 +41,14 @@ public class MainSys {
 		// mJFrame.setVisible(true);
 	}
 
-	private static void initParam() {
+	private void initParam() {
 		SpeechRecognizer mIat = SpeechRecognizer.createRecognizer();
 		mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
 		mIat.startListening(mRecognizerListener);
+		mRobotUtil = new RobotUtil();
 	}
 
-	private static RecognizerListener mRecognizerListener = new RecognizerListener() {
+	private RecognizerListener mRecognizerListener = new RecognizerListener() {
 
 		@Override
 		public void onVolumeChanged(int arg0) {
@@ -48,7 +58,13 @@ public class MainSys {
 		@Override
 		public void onResult(RecognizerResult result, boolean arg1) {
 			String tempString = result.getResultString();
-			System.out.println(tempString);
+			mIFlyJsonModel = gson.fromJson(tempString, IFlyJsonModel.class);
+			mStringBuffer.delete(0, mStringBuffer.length());
+			for (Ws mWs : mIFlyJsonModel.getWs()) {
+				mStringBuffer.append(mWs + "/");
+			}
+			String resultString = mStringBuffer.toString();
+			mRobotUtil.robotOperation(resultString);
 		}
 
 		@Override

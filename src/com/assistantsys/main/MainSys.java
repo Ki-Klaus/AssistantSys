@@ -1,6 +1,8 @@
 package com.assistantsys.main;
 
 import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.Iterator;
@@ -8,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import com.assistantsys.model.IFlyJsonModel;
 import com.assistantsys.model.Ws;
@@ -33,12 +36,17 @@ public class MainSys {
 	}
 
 	public static void main(String[] args) throws AWTException {
-		final Robot robot = new Robot();
-		// final JFrame mJFrame = new JFrame();
-		// mJFrame.setUndecorated(true);
-		// mJFrame.setSize(400, 300);
-		// mJFrame.setLocationRelativeTo(null);
-		// mJFrame.setVisible(true);
+		JFrame mJFrame = new JFrame();
+		JLabel mJLabel = new JLabel();
+		mJFrame.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20));
+		mJFrame.getContentPane().setBackground(Color.black);
+		mJLabel.setText("11111");
+		mJLabel.setForeground(Color.white);
+		mJFrame.setUndecorated(true);
+		mJFrame.setSize(400, 300);
+		mJFrame.setLocationRelativeTo(null);
+		mJFrame.add(mJLabel);
+		mJFrame.setVisible(true);
 	}
 
 	private void initParam() {
@@ -61,7 +69,7 @@ public class MainSys {
 			mIFlyJsonModel = gson.fromJson(tempString, IFlyJsonModel.class);
 			mStringBuffer.delete(0, mStringBuffer.length());
 			for (Ws mWs : mIFlyJsonModel.getWs()) {
-				mStringBuffer.append(mWs + "/");
+				mStringBuffer.append(mWs + " ");
 			}
 			String resultString = mStringBuffer.toString();
 			mRobotUtil.robotOperation(resultString);
